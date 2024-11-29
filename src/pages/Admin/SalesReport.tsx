@@ -95,7 +95,7 @@ const SalesReport: React.FC = () => {
     fetchCurrentMonthReport();
   }, []);
 
-  // 獲取當月報告（默認顯示）
+  // Fetch current month report
   const fetchCurrentMonthReport = async () => {
     try {
       setLoading(true);
@@ -103,7 +103,7 @@ const SalesReport: React.FC = () => {
       if (!response.ok) throw new Error('Failed to fetch current month report');
       const data = await response.json();
       setReport(data);
-      console.log(data);
+
     } catch (error) {
       message.error('Failed to load current month report');
       console.error(error);
@@ -112,7 +112,7 @@ const SalesReport: React.FC = () => {
     }
   };
 
-  // 獲取年度報告
+  // Fetch yearly report
   const fetchYearlyReport = async () => {
     try {
       setLoading(true);
@@ -131,7 +131,7 @@ const SalesReport: React.FC = () => {
     }
   };
 
-  // 獲取自定義日期範圍報告
+  // Fetch custom report
   const fetchCustomReport = async (startDate: string, endDate: string) => {
     try {
       setLoading(true);
@@ -149,7 +149,7 @@ const SalesReport: React.FC = () => {
     }
   };
 
-  // 處理日期範圍選擇
+  // Handle date range selection
   const handleDateRangeChange = (dates: any) => {
     if (dates && dates[0] && dates[1]) {
       const startDate = dates[0].format('YYYY-MM-DD');
@@ -158,7 +158,7 @@ const SalesReport: React.FC = () => {
     }
   };
 
-  // 處理類別銷售數據為圓餅圖格式
+  // Prepare category sales data for pie chart
   const prepareCategoryData = (): CategorySales[] => {
     return Object.entries(report.salesByCategory).map(([categoryId, data]) => ({
       name: categories[categoryId] || 'Unknown',
@@ -166,13 +166,13 @@ const SalesReport: React.FC = () => {
     }));
   };
 
-  // 修改圖表尺寸計算邏輯
+  // Modify chart dimensions calculation logic
   const getChartDimensions = () => {
     const width = window.innerWidth;
-    if (width < 768) { // 移動設備
+    if (width < 768) { // Mobile device
       return {
-        width: width - 48, // 考慮容器padding
-        height: width < 400 ? 280 : 300 // 較小螢幕使用更小的高度
+        width: width - 48, // Consider container padding
+        height: width < 400 ? 280 : 300 // Use smaller height for smaller screens
       };
     }
     return {
@@ -181,7 +181,7 @@ const SalesReport: React.FC = () => {
     };
   };
 
-  // 修改按鈕點擊處理函數
+  // Modify button click handler
   const handleMonthlyReport = async () => {
     setActiveReport('monthly');
     await fetchCurrentMonthReport();
@@ -202,7 +202,7 @@ const SalesReport: React.FC = () => {
     if (report.type === 'monthly') {
       return (
         <>
-          {/* 總計數據卡片 - 優化移動端顯示 */}
+          {/* Total data cards - Optimized for mobile display */}
           <div className="p-4 md:p-6">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 mb-6">
               <div className="bg-white p-4 md:p-6 rounded-lg shadow border border-gray-200">
@@ -219,9 +219,9 @@ const SalesReport: React.FC = () => {
               </div>
             </div>
 
-            {/* 圖表容器 - 優化移動端顯示 */}
+            {/* Chart container - Optimized for mobile display */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 mt-6">
-              {/* 每日銷售額圖表 */}
+              {/* Daily sales chart */}
               <div className="bg-white p-3 md:p-4 rounded-lg shadow">
                 <h3 className="text-base md:text-lg font-medium text-gray-900 mb-3">Daily Sales</h3>
                 <div className="flex justify-center items-center">
@@ -235,7 +235,7 @@ const SalesReport: React.FC = () => {
                     <XAxis 
                       dataKey="date" 
                       tick={{ fontSize: width < 768 ? 10 : 12 }}
-                      interval={width < 768 ? 2 : 0} // 移動端顯示較少的刻度
+                      interval={width < 768 ? 2 : 0} // Show fewer ticks on mobile
                     />
                     <YAxis
                       tick={{ fontSize: width < 768 ? 10 : 12 }}
@@ -252,7 +252,7 @@ const SalesReport: React.FC = () => {
                 </div>
               </div>
 
-              {/* 類別銷售額圓餅圖 */}
+              {/* Category sales pie chart */}
               <div className="bg-white p-3 md:p-4 rounded-lg shadow">
                 <h3 className="text-base md:text-lg font-medium text-gray-900 mb-3">Sales by Category</h3>
                 <div className="flex justify-center items-center">
@@ -260,28 +260,35 @@ const SalesReport: React.FC = () => {
                     <Pie
                       data={prepareCategoryData()}
                       cx="50%"
-                      cy="50%"
-                      innerRadius={width < 768 ? width * 0.15 : 60}
-                      outerRadius={width < 768 ? width * 0.25 : 100}
+                      cy="55%"
+                      innerRadius={width < 768 ? width * 0.12 : 50}
+                      outerRadius={width < 768 ? width * 0.2 : 80}
                       fill="#8884d8"
                       paddingAngle={5}
                       dataKey="value"
-                      label={({name, value}) => `${name}: $${value.toFixed(2)}`}
+                      label={({name, value}) => `${name}: $${value.toFixed(0)}`}
                     >
                       {prepareCategoryData().map((_, index) => (
                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                       ))}
                     </Pie>
-                    <Tooltip formatter={(value) => `$${value}`} />
-                    <Legend 
-                      layout="vertical"
-                      align="center"
-                      verticalAlign="bottom"
-                      wrapperStyle={{ 
-                        fontSize: width < 768 ? '12px' : '14px',
-                        padding: '10px 0'
-                      }} 
+                    <Tooltip 
+                      formatter={(value) => `$${value}`}
+                      contentStyle={{ fontSize: '14px' }}
                     />
+                    {/* 只在桌面端顯示圖例 */}
+                    {width >= 768 && (
+                      <Legend 
+                        layout="vertical"
+                        align="right"
+                        verticalAlign="middle"
+                        wrapperStyle={{ 
+                          fontSize: '14px',
+                          padding: '0 20px',
+                          right: 20,
+                        }}
+                      />
+                    )}
                   </PieChart>
                 </div>
               </div>
@@ -322,7 +329,7 @@ const SalesReport: React.FC = () => {
                         </tr>
                       ))}
 
-                      {/* 無數據時的提示 */}
+                      {/* No data message */}
                       {Object.keys(report.salesByCategory).length === 0 && (
                         <tr>
                           <td colSpan={3} className="px-3 md:px-6 py-2 md:py-3 text-center text-sm text-gray-500">
@@ -337,7 +344,7 @@ const SalesReport: React.FC = () => {
             </div>
           </div>
 
-          {/* 訂單詳情表格 - 優化移動端顯示 */}
+          {/* Order details table - Optimized for mobile display */}
           <div className="mt-6 p-4 md:p-6">
             <h3 className="text-lg font-medium text-gray-900 mb-4">Order Details</h3>
             <div className="bg-white rounded-lg shadow">
@@ -357,7 +364,7 @@ const SalesReport: React.FC = () => {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {/* 前三筆訂單 */}
+                    {/* First three orders */}
                     {report.details.slice(0, 3).map((detail) => (
                       <tr key={detail._id}>
                         <td className="px-3 md:px-6 py-2 md:py-3 whitespace-nowrap text-sm text-gray-900">
@@ -372,7 +379,7 @@ const SalesReport: React.FC = () => {
                       </tr>
                     ))}
 
-                    {/* 展開/關閉的剩餘訂單 */}
+                    {/* Expanded/collapsed remaining orders */}
                     {isExpanded && report.details.slice(3).map((detail) => (
                       <tr key={detail._id}>
                         <td className="px-3 md:px-6 py-2 md:py-3 whitespace-nowrap text-sm text-gray-900">
@@ -387,7 +394,7 @@ const SalesReport: React.FC = () => {
                       </tr>
                     ))}
 
-                    {/* 展開/關閉按鈕 */}
+                    {/* Expand/collapse button */}
                     {report.details.length > 3 && (
                       <tr>
                         <td colSpan={3} className="px-3 md:px-6 py-2 md:py-3">
@@ -410,7 +417,7 @@ const SalesReport: React.FC = () => {
     } else if (report.type === 'yearly') {
       return (
         <div className="space-y-6">
-          {/* 總計數據卡片 */}
+          {/* Total data cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             <div className="bg-white p-6 rounded-lg shadow border border-gray-200">
               <h3 className="text-sm font-medium text-gray-500 uppercase">Total Sales</h3>
@@ -426,9 +433,9 @@ const SalesReport: React.FC = () => {
             </div>
           </div>
 
-          {/* 圖表區域 */}
+          {/* Chart area */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* 每月銷售額直方圖 */}
+            {/* Monthly sales bar chart */}
             <div className="bg-white p-3 md:p-4 rounded-lg shadow">
               <h3 className="text-base md:text-lg font-medium text-gray-900 mb-3">Monthly Sales Trend</h3>
               <div className="flex justify-center items-center">
@@ -442,7 +449,7 @@ const SalesReport: React.FC = () => {
                   <XAxis 
                     dataKey="month" 
                     tick={{ fontSize: width < 768 ? 10 : 12 }}
-                    interval={width < 768 ? 1 : 0} // 移動端顯示較少的刻度
+                    interval={width < 768 ? 1 : 0} // Show fewer ticks on mobile
                   />
                   <YAxis
                     tick={{ fontSize: width < 768 ? 10 : 12 }}
@@ -459,7 +466,7 @@ const SalesReport: React.FC = () => {
               </div>
             </div>
             
-            {/* 類別銷售額圓餅圖 */}
+            {/* Category sales pie chart */}
             <div className="bg-white p-3 md:p-4 rounded-lg shadow">
               <h3 className="text-base md:text-lg font-medium text-gray-900 mb-3">Sales by Category</h3>
               <div className="flex justify-center items-center">
@@ -470,13 +477,13 @@ const SalesReport: React.FC = () => {
                   <Pie
                     data={prepareCategoryData()}
                     cx="50%"
-                    cy="45%" // 調整圓心位置，留更多空間給圖例
+                    cy="55%"
                     innerRadius={width < 768 ? width * 0.12 : 50}
                     outerRadius={width < 768 ? width * 0.2 : 80}
                     fill="#8884d8"
                     paddingAngle={5}
                     dataKey="value"
-                    label={({name, value}) => `${name}: $${value.toFixed(0)}`} // 簡化標籤內容
+                    label={({name, value}) => `${name}: $${value.toFixed(0)}`} // Simplify label content
                   >
                     {prepareCategoryData().map((_, index) => (
                       <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
@@ -485,16 +492,6 @@ const SalesReport: React.FC = () => {
                   <Tooltip 
                     formatter={(value) => `$${value}`}
                     contentStyle={{ fontSize: width < 768 ? '12px' : '14px' }}
-                  />
-                  <Legend
-                    layout="horizontal"
-                    align="center"
-                    verticalAlign="bottom"
-                    wrapperStyle={{ 
-                      fontSize: width < 768 ? '10px' : '12px',
-                      padding: '10px 0',
-                      width: '100%'
-                    }}
                   />
                 </PieChart>
               </div>
@@ -514,7 +511,7 @@ const SalesReport: React.FC = () => {
       <TopBar />
       <div className="max-w-7xl mx-auto py-4 md:py-6 px-4 sm:px-6 lg:px-8">
         <div className="bg-white shadow rounded-lg">
-          {/* 頂部控制區 - 優化移動端顯示 */}
+          {/* Top control area - Optimized for mobile display */}
           <div className="p-4 md:p-6 border-b border-gray-200">
             <div className="flex flex-col md:flex-row md:justify-between md:items-center space-y-4 md:space-y-0">
               <div>
@@ -526,7 +523,7 @@ const SalesReport: React.FC = () => {
                 </p>
               </div>
               
-              {/* 控制按鈕組 - 移動端堆疊顯示 */}
+              {/* Control buttons - Stacked on mobile */}
               <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
                 <Button
                   onClick={handleMonthlyReport}

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -20,6 +21,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   const [amountPaid, setAmountPaid] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [error, setError] = useState('');
+  const { fetchWithAuth } = useAuth();
 
   const handleNumberClick = (num: string) => {
     if (num === '.' && amountPaid.includes('.')) return;
@@ -52,7 +54,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/payments`, {
+      const response = await fetchWithAuth(`${import.meta.env.VITE_BACKEND_URL}/payments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

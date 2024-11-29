@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import TopBar from '../../components/TopBar';
-import PaymentModal from './PaymentModal';
+import PaymentModal from '../../components/PaymentModal';
 import { message } from 'antd';
 // import { useAuth } from '../../hooks/useAuth';
 

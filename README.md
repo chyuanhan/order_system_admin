@@ -1,50 +1,107 @@
-# React + TypeScript + Vite
+# Restaurant Management System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern restaurant management system that provides payment, menu management and sales reporting functionalities.
 
-Currently, two official plugins are available:
+## Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Demo Link: [https://order-system-admin.vercel.app/](https://order-system-admin.vercel.app/)
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+### Payment
 
-- Configure the top-level `parserOptions` property like this:
+- Cashier mode
+- Process payment
+- Responsive design for both mobile and desktop
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+### Menu Management
+
+- Add, edit, and delete menu items
+- Upload dish images
+- Filter dishes by category
+- Responsive design for both mobile and desktop
+
+### Sales Reports
+
+- View monthly and yearly sales reports
+- Custom date range sales data
+- Graphical visualization of sales trends
+- Sales statistics by category
+
+## Tech Stack
+
+- **Frontend Framework**: React + TypeScript
+- **UI Components**: Ant Design
+- **Charts**: Recharts
+- **Styling**: Tailwind CSS
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js >= 14.0.0
+- npm >= 6.0.0
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/chyuanhan/order_system_admin.git
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+2. Install dependencies
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+npm install
 ```
+
+3. Set up environment variables
+   Create a `.env` file and add the following:
+
+```bash
+VITE_BACKEND_URL=your_backend_url
+VITE_BACKEND_ASSET_URL=your_asset_url
+```
+
+4. Start development server
+
+```bash
+npm run dev
+```
+
+## Project Structure
+
+├── components/
+│ ├── MenuItemModal.tsx # Menu item edit modal
+│ └── TopBar.tsx # Top navigation bar
+├── pages/
+│ └── Admin/
+│ ├── MenuManagement.tsx # Menu management page
+│ └── SalesReport.tsx # Sales report page
+└── context/
+└── AuthContext.tsx # Authentication context
+
+## API Endpoints
+
+### Payment
+
+- `GET /orders?unpaid=true` - Get unpaid orders
+- `POST /payments` - Process payment
+
+### Menu Management
+
+- `GET /menu` - Get all menu items
+- `POST /menu` - Add a new menu item
+- `PUT /menu/:id` - Update a menu item
+- `DELETE /menu/:id` - Delete a menu item
+
+### Sales Reports
+
+- `GET /reports/current-month` - Get current month report
+- `GET /reports/yearly` - Get yearly report
+- `GET /reports/custom` - Get custom date range report
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
