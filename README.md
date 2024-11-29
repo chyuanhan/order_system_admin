@@ -4,7 +4,7 @@ A modern restaurant management system that provides payment, menu management and
 
 ## Demo
 
-Demo Link: Please wait for the deployment!!!!!
+Demo Link: Please wait for the deployment
 
 ## Features
 
