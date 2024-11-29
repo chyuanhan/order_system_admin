@@ -4,7 +4,7 @@ A modern restaurant management system that provides payment, menu management and
 
 ## Demo
 
-Demo Link: [https://order-system-admin.vercel.app/](https://order-system-admin.vercel.app/)
+Demo Link: [Please wait](https://order-system-admin.vercel.app/)
 
 ## Features
 
