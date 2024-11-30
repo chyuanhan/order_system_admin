@@ -74,7 +74,7 @@ const SalesReport: React.FC = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeReport, setActiveReport] = useState<'monthly' | 'yearly'>('monthly');
 
-  // 獲取類別名稱
+  // get category names
   const fetchCategories = async () => {
     try {
       const response = await fetchWithAuth(`${import.meta.env.VITE_BACKEND_URL}/categories`);
@@ -276,7 +276,7 @@ const SalesReport: React.FC = () => {
                       formatter={(value) => `$${value}`}
                       contentStyle={{ fontSize: '14px' }}
                     />
-                    {/* 只在桌面端顯示圖例 */}
+                    {/* only show legend on desktop */}
                     {width >= 768 && (
                       <Legend 
                         layout="vertical"

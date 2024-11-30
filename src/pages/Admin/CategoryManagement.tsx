@@ -204,7 +204,7 @@ const CategoryManagement: React.FC = () => {
         />
       </Modal>
 
-      {/* 編輯分類彈窗 */}
+      {/* edit category modal */}
       <Modal
         title="Edit Category"
         open={isEditModalOpen}

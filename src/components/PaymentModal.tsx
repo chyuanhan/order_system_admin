@@ -44,7 +44,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   const handleSubmit = async () => {
     const paid = parseFloat(amountPaid);
-    // 将金额转换为整数进行比较（乘以100消除小数）
+    // convert amount to integer for comparison (multiply by 100 to remove decimals)
     const paidInCents = Math.round(paid * 100);
     const totalInCents = Math.round(totalAmount * 100);
 

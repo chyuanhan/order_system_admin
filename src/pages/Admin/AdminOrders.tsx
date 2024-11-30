@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import TopBar from '../../components/TopBar';
 import PaymentModal from '../../components/PaymentModal';
 import { message } from 'antd';
-// import { useAuth } from '../../hooks/useAuth';
 
 interface MenuItem {
   id: string;
@@ -35,7 +34,6 @@ interface TableOrder {
 }
 
 const AdminOrders: React.FC = () => {
-  // const { isAuthenticated, user } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedTableId, setSelectedTableId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -55,7 +53,7 @@ const AdminOrders: React.FC = () => {
       }
       const data = await response.json();
       setOrders(data);
-      // 如果當前選中的桌號的所有訂單都已結帳，清除選中狀態
+      // if all orders for the currently selected table are paid, clear the selection
       if (selectedTableId && !data.some((order: Order) => order.tableId === selectedTableId)) {
         setSelectedTableId(null);
       }
@@ -67,19 +65,19 @@ const AdminOrders: React.FC = () => {
     }
   }, []); 
 
-  // 初始加載訂單
+  // initial load orders
   useEffect(() => {
-    fetchOrders(true);  // 初始加載顯示 loading
+    fetchOrders(true);  // initial load shows loading
   }, [fetchOrders]);
 
-  // 處理支付成功
+  // handle payment success
   const handlePaymentSuccess = async () => {
-    await fetchOrders(false);  // 刷新數據時不顯示 loading
+    await fetchOrders(false);  // do not show loading when refreshing data
     setIsPaymentModalOpen(false);
     message.success('Payment processed successfully');
   };
 
-  // 處理訂單數據，按桌號分組
+  // process order data, group by table
   const groupedOrders = React.useMemo(() => {
     const grouped = orders.reduce((acc: { [key: string]: TableOrder }, order) => {
       if (order.status !== 'paid') {
@@ -98,7 +96,7 @@ const AdminOrders: React.FC = () => {
     return Object.values(grouped);
   }, [orders]);
 
-  // 獲取選中桌子的訂單
+  // get selected table orders
   const selectedTableOrders = selectedTableId 
     ? groupedOrders.find(group => group.tableId === selectedTableId)
     : null;
@@ -109,7 +107,7 @@ const AdminOrders: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <TopBar />
-      {/* 可以添加一個輕量級的刷新指示器 */}
+      {/* add a lightweight refresh indicator */}
       {refreshing && (
         <div className="fixed top-0 left-0 w-full h-1">
           <div className="h-full bg-blue-500 animate-pulse"></div>
@@ -117,7 +115,7 @@ const AdminOrders: React.FC = () => {
       )}
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="flex space-x-4 h-[calc(100vh-120px)]">
-          {/* 左側：桌子列表 */}
+          {/* left: table list */}
           <div className="w-1/3 bg-white shadow overflow-hidden sm:rounded-lg flex flex-col">
             <div className="px-4 py-5 sm:px-6 flex-shrink-0">
               <h3 className="text-lg leading-6 font-medium text-gray-900">
@@ -150,7 +148,7 @@ const AdminOrders: React.FC = () => {
             </div>
           </div>
 
-          {/* 右側：訂單詳情 */}
+          {/* right: order details */}
           <div className="w-2/3 bg-white shadow overflow-hidden sm:rounded-lg flex flex-col relative">
             {selectedTableOrders ? (
               <>
@@ -220,7 +218,7 @@ const AdminOrders: React.FC = () => {
                     Process Payment
                   </button>
                   
-                  {/* 結賬彈窗 */}
+                  {/* payment modal */}
                   {isPaymentModalOpen && (
                     <PaymentModal
                       isOpen={isPaymentModalOpen}

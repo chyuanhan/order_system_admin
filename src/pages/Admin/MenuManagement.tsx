@@ -73,7 +73,7 @@ const MenuManagement: React.FC = () => {
   const filteredItems = useMemo(() => {
     if (!menuItems) return [];
     
-    // 首先獲取過濾後的項目
+    // get filtered items
     const filtered = activeCategory === 'all' 
       ? menuItems 
       : menuItems.filter(item => {
@@ -83,7 +83,7 @@ const MenuManagement: React.FC = () => {
           return item.category._id === activeCategory;
         });
 
-    // 按照 _id 排序
+    // sort by _id
     return filtered.sort((a, b) => a._id.localeCompare(b._id));
   }, [menuItems, activeCategory]);
 

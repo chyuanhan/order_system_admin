@@ -20,7 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  // 驗證 token 的函數
+  // function to verify token
   const verifyToken = useCallback(async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -41,7 +41,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setUser(data.admin);
         setIsAuthenticated(true);
       } else {
-        // token 無效，清除本地存儲
+        // token is invalid, clear local storage
         localStorage.removeItem('token');
         setUser(null);
         setIsAuthenticated(false);
@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  // 登入函數
+  // login function
   const login = useCallback(async (username: string, password: string): Promise<boolean> => {
     try {
       const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/login`, {
@@ -75,7 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const data = await response.json();
       
       if (data.token && data.admin) {
-        // 保存 token 到 localStorage
+        // save token to localStorage
         localStorage.setItem('token', data.token);
         setUser(data.admin);
         setIsAuthenticated(true);
@@ -89,14 +89,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  // 登出函數
+  // logout function
   const logout = useCallback(() => {
     localStorage.removeItem('token');
     setUser(null);
     setIsAuthenticated(false);
   }, []);
 
-  // 帶 token 的請求函數
+  // fetch with token function
   const fetchWithAuth = useCallback(async (url: string, options: RequestInit = {}) => {
     const token = localStorage.getItem('token');
     const headers = {
@@ -107,13 +107,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return fetch(url, { ...options, headers });
   }, []);
 
-  // 初始化時驗證 token
+  // verify token when initializing
   useEffect(() => {
     verifyToken();
   }, [verifyToken]);
 
   if (isLoading) {
-    return <div>Loading...</div>; // 或者使用一個加載組件
+    return <div>Loading...</div>; // or use a loading component
   }
 
   const value = {

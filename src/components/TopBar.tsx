@@ -9,7 +9,7 @@ const TopBar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // 如果是登入頁面或未認證，不顯示 TopBar
+  // if the page is the login page or not authenticated, do not show the TopBar
   if (location.pathname === '/admin/login' || !isAuthenticated) {
     return null;
   }

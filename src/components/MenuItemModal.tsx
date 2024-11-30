@@ -1,18 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// interface MenuItem {
-//   _id: string;
-//   name: string;
-//   description: string;
-//   price: number | string;
-//   category: string | {
-//     _id: string;
-//     name: string;
-//   };
-//   image: string | File;
-//   isAvailable: boolean;
-// }
-
 interface MenuItem {
   _id: string;
   name: string;
