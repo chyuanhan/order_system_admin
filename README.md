@@ -5,6 +5,8 @@ A modern restaurant management system that provides payment, menu management and
 ## Demo
 
 Demo Link: [https://order-system-admin.vercel.app/admin](https://order-system-admin.vercel.app/admin)
+(Testing account: admin, password: admin)
+(Sign up function will be realized.)
 
 ## Features
 
