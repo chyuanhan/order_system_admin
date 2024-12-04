@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import { useAuth } from '../context/AuthContext';
 import logo from '../assets/logo.jpg';
 
 const TopBar: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -62,21 +62,30 @@ const TopBar: React.FC = () => {
           </div>
 
           {/* Right Side Action Area */}
-          <div className="flex items-center">
+          <div className="flex items-center space-x-4">
+            {/* Username Display - Desktop */}
+            <span className="hidden md:block text-sm text-gray-700">
+              Welcome, {user?.username}
+            </span>
             {/* Desktop Logout Button */}
             <button
               onClick={handleLogout}
-              className="hidden md:block ml-4 px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="hidden md:block px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               Logout
             </button>
-            {/* Mobile Menu Button */}
-            <button
-              className="md:hidden ml-4 p-2"
-              onClick={toggleSidebar}
-            >
-              <Menu className="text-gray-600" />
-            </button>
+            {/* Mobile Username and Menu Button */}
+            <div className="md:hidden flex items-center space-x-2">
+              <span className="text-sm text-gray-700">
+                Welcome, {user?.username}
+              </span>
+              <button
+                className="p-2"
+                onClick={toggleSidebar}
+              >
+                <Menu className="text-gray-600" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -93,6 +102,7 @@ const TopBar: React.FC = () => {
             <X className="text-gray-600" />
           </button>
         </div>
+        
         <nav className="mt-4 flex flex-col space-y-2 p-4">
           {navLinks.map((link) => (
             <Link

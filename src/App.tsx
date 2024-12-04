@@ -6,6 +6,7 @@ import MenuManagement from './pages/Admin/MenuManagement';
 import SalesReport from './pages/Admin/SalesReport';
 import CategoryManagement from './pages/Admin/CategoryManagement';
 import { AuthProvider,AuthContext } from './context/AuthContext';
+import AdminSignUp from './pages/Admin/AdminSignUp';
 
 
 const App: React.FC = () => {
@@ -26,6 +27,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           } />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/signup" element={<AdminSignUp />} />
           <Route path="/admin/menu" element={
             <ProtectedRoute>
               <MenuManagement />

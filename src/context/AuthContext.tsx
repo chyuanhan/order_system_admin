@@ -10,6 +10,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<boolean>;
   logout: () => void;
+  register: (username: string, password: string) => Promise<boolean>;
   fetchWithAuth: (url: string, options?: RequestInit) => Promise<Response>;
 }
 
@@ -107,6 +108,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return fetch(url, { ...options, headers });
   }, []);
 
+  // register function
+  const register = useCallback(async (username: string, password: string): Promise<boolean> => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || 'Sign up failed');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Sign up error:', error);
+      throw error;
+    }
+  }, []);
+
   // verify token when initializing
   useEffect(() => {
     verifyToken();
@@ -121,6 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isAuthenticated,
     login,
     logout,
+    register,
     fetchWithAuth,
   };
 

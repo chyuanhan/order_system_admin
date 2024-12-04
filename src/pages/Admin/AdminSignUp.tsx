@@ -3,14 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { message } from 'antd';
 
-const AdminLogin: React.FC = () => {
+const AdminSignUp: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { register, login } = useAuth();
 
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
     try {
@@ -21,17 +21,22 @@ const AdminLogin: React.FC = () => {
         return;
       }
 
-      const success = await login(username, password);
+      const registerSuccess = await register(username, password);
       
-      if (success) {
-        message.success('Login successful');
-        navigate('/admin');
-      } else {
-        message.error('Invalid username or password');
+      if (registerSuccess) {
+        message.success('Sign up successful');
+        const loginSuccess = await login(username, password);
+        if (loginSuccess) {
+          message.success('Login successful');
+          navigate('/admin');
+        } else {
+          message.error('Automatic login failed, please log in manually');
+          navigate('/admin/login');
+        }
       }
     } catch (error) {
-      console.error('Login error:', error);
-      message.error('An error occurred during login');
+      console.error('Sign up error:', error);
+      message.error(error instanceof Error ? error.message : 'Sign up process error');
     } finally {
       setLoading(false);
     }
@@ -41,10 +46,10 @@ const AdminLogin: React.FC = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-lg shadow-lg">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Admin Login</h2>
+          <h2 className="text-3xl font-bold text-gray-900">Admin Sign Up</h2>
         </div>
         
-        <form onSubmit={handleLogin} className="space-y-4">
+        <form onSubmit={handleSignUp} className="space-y-4">
           <div>
             <label htmlFor="username" className="block text-sm font-medium text-gray-700">
               Username
@@ -79,23 +84,23 @@ const AdminLogin: React.FC = () => {
               disabled={loading}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? 'Signing up...' : 'Sign up'}
+            </button>
+          </div>
+
+          <div className="text-center">
+            <button
+              type="button"
+              onClick={() => navigate('/admin/login')}
+              className="text-sm text-blue-600 hover:text-blue-800"
+            >
+              Already have an account? Return to login
             </button>
           </div>
         </form>
-        
-        <div className="text-center">
-          <button
-            type="button"
-            onClick={() => navigate('/admin/signup')}
-            className="text-sm text-blue-600 hover:text-blue-800"
-          >
-            Sign Up
-          </button>
-        </div>
       </div>
     </div>
   );
 };
 
-export default AdminLogin;
+export default AdminSignUp; 

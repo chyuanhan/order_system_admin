@@ -44,7 +44,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
 
   const handleSubmit = async () => {
     const paid = parseFloat(amountPaid);
-    // convert amount to integer for comparison (multiply by 100 to remove decimals)
     const paidInCents = Math.round(paid * 100);
     const totalInCents = Math.round(totalAmount * 100);
 
@@ -80,7 +79,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
       setError(err instanceof Error ? err.message : 'Payment failed');
     }
   };
-  
 
   if (!isOpen) return null;
 
@@ -92,8 +90,11 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg p-4 w-full max-w-md mx-auto">
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center" 
+      style={{ zIndex: 9999 }}
+    >
+      <div className="bg-white rounded-lg p-4 w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl md:text-2xl font-bold">Payment</h2>
           <button 
@@ -199,4 +200,4 @@ const PaymentModal: React.FC<PaymentModalProps> = ({
   );
 };
 
-export default PaymentModal; 
+export default PaymentModal;
